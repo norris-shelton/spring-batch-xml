@@ -10,6 +10,7 @@ import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.StepScopeTestExecutionListener;
 import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -45,6 +46,7 @@ public class TestReaderAndWriter {
             count = StepScopeTestUtils.doInStepScope(execution, () -> {
                 int numCars = 0;
                 int numTrucks = 0;
+                itemReader.setResource(new ClassPathResource("cars-input.xml"));
                 itemReader.open(execution.getExecutionContext());
                 Object vehicle;
                 Car car;

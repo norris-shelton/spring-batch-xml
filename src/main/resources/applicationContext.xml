@@ -27,15 +27,19 @@
         </property>
     </bean>
 
+    <bean id="multiResourceReader" class=" org.springframework.batch.item.file.MultiResourceItemReader">
+        <property name="resources" value="classpath:cars-input*.xml"/>
+        <property name="delegate" ref="xmlItemReader"/>
+    </bean>
+
     <!-- ItemReader which reads data from XML file -->
     <bean id="xmlItemReader" class="org.springframework.batch.item.xml.StaxEventItemReader"
-          p:resource="classpath:cars-input.xml"
           p:fragmentRootElementNames="car,truck"
           p:unmarshaller-ref="jaxb2Marshaller"/>
 
     <!-- XML ItemWriter which writes the data in XML format -->
     <bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter"
-        p:resource="file:xml/cars.xml"
+        p:resource="file:target/xml/cars.xml"
         p:rootTagName="cars"
         p:marshaller-ref="jaxb2Marshaller"/>
 

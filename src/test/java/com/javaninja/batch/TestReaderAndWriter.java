@@ -32,10 +32,10 @@ import static org.junit.Assert.fail;
 public class TestReaderAndWriter {
 
     @Autowired
-    private StaxEventItemReader<Car> itemReader;
+    private StaxEventItemReader<Object> itemReader;
 
     @Autowired
-    private StaxEventItemWriter<Car> itemWriter;
+    private StaxEventItemWriter<Object> itemWriter;
 
     @Test
     public void testReader() {
@@ -44,17 +44,35 @@ public class TestReaderAndWriter {
         try {
             count = StepScopeTestUtils.doInStepScope(execution, () -> {
                 int numCars = 0;
+                int numTrucks = 0;
                 itemReader.open(execution.getExecutionContext());
+                Object vehicle;
                 Car car;
+                Truck truck;
                 try {
-                    while ((car = itemReader.read()) != null) {
-                        assertNotNull(car);
-                        assertNotNull(car.getMake());
-                        assertNotNull(car.getModel());
-                        assertNotNull(car.getColor());
-                        assertTrue(car.getDoors() > 0);
-                        numCars++;
+                    while ((vehicle = itemReader.read()) != null) {
+
+                        if (vehicle instanceof Truck) {
+                            truck = (Truck) vehicle;
+                            assertNotNull(truck);
+                            assertNotNull(truck.getMake());
+                            assertNotNull(truck.getModel());
+                            assertNotNull(truck.getColor());
+                            assertTrue(truck.isExtendedCab());
+                            assertTrue(truck.getDoors() > 0);
+                            numTrucks++;
+
+                        } else  if (vehicle instanceof Car) {
+                            car = (Car) vehicle;
+                            assertNotNull(car);
+                            assertNotNull(car.getMake());
+                            assertNotNull(car.getModel());
+                            assertNotNull(car.getColor());
+                            assertTrue(car.getDoors() > 0);
+                            numCars++;
+                        }
                     }
+                    assertEquals(1, numTrucks);
                 } finally {
                     try { itemReader.close(); } catch (ItemStreamException e) { fail(e.toString());
                     }
@@ -64,14 +82,22 @@ public class TestReaderAndWriter {
         } catch (Exception e) {
             fail(e.toString());
         }
-        assertEquals(100000, count);
+        assertEquals(1000, count);
     }
 
     @Test
     public void testWriter() throws Exception {
-        List<Car> cars = new LinkedList<>();
+        List<Object> cars = new LinkedList<>();
+        Truck truck = new Truck();
+        truck.setMake("truck make");
+        truck.setModel("truck model");
+        truck.setColor("truck color");
+        truck.setDoors(2);
+        truck.setExtendedCab(true);
+        cars.add(truck);
+
         Car car;
-        for (int i = 1; i < 10001; i++) {
+        for (int i = 1; i < 1001; i++) {
             car = new Car();
             car.setMake("make" + i);
             car.setModel("model" + i);

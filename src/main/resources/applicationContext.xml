@@ -22,6 +22,7 @@
         <property name="classesToBeBound">
             <list>
                 <value>com.javaninja.batch.Car</value>
+                <value>com.javaninja.batch.Truck</value>
             </list>
         </property>
     </bean>
@@ -29,7 +30,7 @@
     <!-- ItemReader which reads data from XML file -->
     <bean id="xmlItemReader" class="org.springframework.batch.item.xml.StaxEventItemReader"
           p:resource="classpath:cars-input.xml"
-          p:fragmentRootElementName="car"
+          p:fragmentRootElementNames="car,truck"
           p:unmarshaller-ref="jaxb2Marshaller"/>
 
     <!-- XML ItemWriter which writes the data in XML format -->

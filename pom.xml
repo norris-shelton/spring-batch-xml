@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--This is the version of Spring that Spring Batch uses-->
         <spring.version>4.0.5.RELEASE</spring.version>
-        <spring.batch.version>3.0.6.RELEASE</spring.batch.version>
+        <spring.batch.version>4.1.2.RELEASE</spring.batch.version>
         <slf4j.version>1.7.13</slf4j.version>
     </properties>
 
